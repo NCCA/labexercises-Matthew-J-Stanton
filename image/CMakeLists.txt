@@ -14,15 +14,18 @@ include_directories(include)
 # Now we add our target executable and the file it is built from.
 add_executable(Image)
 target_sources(Image PRIVATE src/main.cpp src/Image.cpp include/Image.h)
-
+add_compile_options(-Wall -Wextra -pedantic)
 #################################################################################
 # Testing code
 #################################################################################
 
 find_package(GTest CONFIG REQUIRED)
+find_package(OpenImageIO CONFIG REQUIRED)
+find_package(OpenMP)
 include(GoogleTest)
 enable_testing()
 add_executable(ImageTests)
 target_sources(ImageTests PRIVATE tests/ImageTests.cpp src/Image.cpp include/Image.h)
 target_link_libraries(ImageTests PRIVATE GTest::gtest GTest::gtest_main )
 gtest_discover_tests(ImageTests)
+target_link_libraries(Image PRIVATE OpenImageIO::OpenImageIO OpenImageIO::OpenImageIO_Util OpenMP::OpenMP_CXX)
